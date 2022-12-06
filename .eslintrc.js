@@ -3,6 +3,9 @@ module.exports = {
   extends: '@react-native-community',
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
+  rules: {
+    'prettier/prettier': 0,
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
@@ -10,6 +13,15 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         'no-shadow': 'off',
         'no-undef': 'off',
+        semi: 'off',
+      },
+    },
+    {
+      files: ['*.js', '*.jsx'],
+      rules: {
+        'no-shadow': 'off',
+        'no-undef': 'off',
+        semi: 'off',
       },
     },
   ],
