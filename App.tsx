@@ -2,11 +2,12 @@ import React from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import TestScreen from './TestScreen'
-import HomeScreen from './HomeScreen'
+import HomeScreen from './homescreen/HomeScreen'
+import HomeHeader from './homescreen/HomeHeader'
 
 const Stack = createNativeStackNavigator()
 
-const App = () => {
+const App = ({navigation}: {navigation: any}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -14,7 +15,7 @@ const App = () => {
           name="Home"
           component={HomeScreen}
           options={{
-            title: 'Welcome',
+            header: () => <HomeHeader navigation={navigation} />,
           }}
         />
         <Stack.Screen name="Test" component={TestScreen} />
