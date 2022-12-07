@@ -12,60 +12,49 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import {DraxProvider, DraxView, DraxList} from 'react-native-drax'
 import {Sprit} from './homescreen/HomeScreen'
 
-const ACTIONS: Actions = {
-  motion: [
-    {
-      title: 'Move X by 50',
-      action: 'x+50',
-    },
-    {
-      title: 'Move Y by 50',
-      action: 'y+50',
-    },
-    {
-      title: 'rotate 360',
-      action: '+360',
-    },
-    {
-      title: 'Go to center',
-      action: 'center',
-    },
-    {
-      title: 'Increase Size By 50%',
-      action: 'size+50',
-    },
-    {
-      title: 'Change Size Back to 100%',
-      action: 'size',
-    },
-    {
-      title: 'Decrease Size By 50%',
-      action: 'size-50',
-    },
-    {
-      title: 'Say HELLO',
-      action: 'hello',
-    },
-    {
-      title: 'Think Hmmm...',
-      action: 'Hmmm',
-    },
-    {
-      title: 'Decrease Size By 50%',
-      action: 'size-50',
-    },
-  ],
-  looks: [],
-  controls: [],
-  events: [],
-}
+const ACTIONS: Action[] = [
+  {
+    title: 'Move X by 50',
+    action: 'x+50',
+  },
+  {
+    title: 'Move Y by 50',
+    action: 'y+50',
+  },
+  {
+    title: 'rotate 360',
+    action: '+360',
+  },
+  {
+    title: 'Go to center',
+    action: 'center',
+  },
+  {
+    title: 'Increase Size By 50%',
+    action: 'size+50',
+  },
+  {
+    title: 'Change Size Back to 100%',
+    action: 'size',
+  },
+  {
+    title: 'Decrease Size By 50%',
+    action: 'size-50',
+  },
+  {
+    title: 'Say HELLO',
+    action: 'hello',
+  },
+  {
+    title: 'Think Hmmm...',
+    action: 'hmmm',
+  },
+  {
+    title: 'Decrease Size By 50%',
+    action: 'size-50',
+  },
+]
 
-interface Actions {
-  motion: Action[]
-  looks: Action[]
-  controls: Action[]
-  events: Action[]
-}
 export interface Action {
   title: string
   action: string
@@ -74,10 +63,6 @@ export interface Action {
 const AddActions = ({route, navigation}: {route: Route; navigation: any}) => {
   const [sprits, setSprits] = useState<Sprit[]>(route.params.sprits)
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
-
-  console.log(route.params.setSprits)
-
-  const draggableItemList = ACTIONS.motion
 
   const DragUIComponent = ({item, index}: {item: Action; index: number}) => {
     return (
@@ -99,7 +84,7 @@ const AddActions = ({route, navigation}: {route: Route; navigation: any}) => {
           <View style={styles.section}>
             <Text style={styles.sectionHeading}>Motion</Text>
             <DraxList
-              data={draggableItemList}
+              data={ACTIONS}
               renderItemContent={DragUIComponent}
               keyExtractor={(item, index) => index.toString()}
               scrollEnabled={true}
@@ -144,7 +129,7 @@ const AddActions = ({route, navigation}: {route: Route; navigation: any}) => {
               </View>
             )}
             onReceiveDragDrop={event => {
-              const selected_item = ACTIONS.motion[event.dragged.payload]
+              const selected_item = ACTIONS[event.dragged.payload]
               setSprits(spritsTemp => {
                 spritsTemp[selectedSprit].actions =
                   spritsTemp[selectedSprit].actions.concat(selected_item)

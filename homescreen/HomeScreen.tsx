@@ -35,6 +35,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
         },
   ])
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
+  const [say, setSay] = useState('')
 
   const animationScale = useRef(new Animated.Value(1)).current
 
@@ -63,9 +64,29 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
 
   function startAction() {
     const actions = sprits[0].actions
-    console.log(animationScale._value, 'here')
     actions.forEach(action => {
       switch (action.action) {
+        case 'x+50':
+          Animated.timing(pan, {
+            toValue: {x: pan.x._value + 50, y: pan.y._value},
+            duration: 10,
+            useNativeDriver: false,
+          }).start()
+          break
+        case 'y+50':
+          Animated.timing(pan, {
+            toValue: {x: pan.x._value, y: pan.y._value + 50},
+            duration: 10,
+            useNativeDriver: false,
+          }).start()
+          break
+        case 'center':
+          Animated.timing(pan, {
+            toValue: {x: 0, y: 0},
+            duration: 10,
+            useNativeDriver: false,
+          }).start()
+          break
         case 'size+50':
           Animated.timing(animationScale, {
             toValue: animationScale._value + 0.5,
@@ -86,6 +107,12 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             duration: 10000,
             useNativeDriver: false,
           }).start()
+          break
+        case 'hello':
+          setSay('Hello')
+          break
+        case 'hmmm':
+          setSay('Hmmmm...')
           break
         default:
           break
@@ -125,7 +152,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
               setSelectedSprit(index)
             }}
             {...(index === selectedSprit ? panResponder.panHandlers : '')}>
-            <Text>{sprit.name}</Text>
+            {say !== '' ? <Text style={styles.say}>{say}</Text> : ''}
             <ImageBackground
               source={require('../assets/images/cat.png')}
               resizeMode="cover"
@@ -251,6 +278,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  say: {
+    marginLeft: 30,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 2,
+    textAlign: 'center',
   },
 })
 
