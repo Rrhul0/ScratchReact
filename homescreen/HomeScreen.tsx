@@ -5,6 +5,7 @@ import {
   ImageBackground,
   PanResponder,
   PanResponderInstance,
+  Pressable,
   Route,
   StyleSheet,
   Text,
@@ -33,8 +34,9 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
           actions: [],
         },
   ])
-
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
+
+  const animationScale = useRef(new Animated.Value(1)).current
 
   const pan = useRef(new Animated.ValueXY()).current
 
@@ -59,18 +61,61 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
     }),
   ).current
 
+  function startAction() {
+    const actions = sprits[0].actions
+    console.log(animationScale._value, 'here')
+    actions.forEach(action => {
+      switch (action.action) {
+        case 'size+50':
+          Animated.timing(animationScale, {
+            toValue: animationScale._value + 0.5,
+            duration: 10000,
+            useNativeDriver: false,
+          }).start()
+          break
+        case 'size-50':
+          Animated.timing(animationScale, {
+            toValue: animationScale._value - 0.5,
+            duration: 10000,
+            useNativeDriver: false,
+          }).start()
+          break
+        case 'size':
+          Animated.timing(animationScale, {
+            toValue: 1,
+            duration: 10000,
+            useNativeDriver: false,
+          }).start()
+          break
+        default:
+          break
+      }
+    })
+    return
+  }
+
   return (
     <View style={styles.main}>
       <View style={styles.containerCat}>
+        <Pressable
+          onPress={startAction}
+          style={{position: 'absolute', bottom: 20, right: 10}}>
+          <Text>Start</Text>
+        </Pressable>
         {sprits.map((sprit, index) => (
           <Animated.View
-            style={
+            key={index}
+            style={[
               index === selectedSprit
                 ? {
-                    transform: [{translateX: pan.x}, {translateY: pan.y}],
+                    transform: [
+                      {translateX: pan.x},
+                      {translateY: pan.y},
+                      {scale: animationScale},
+                    ],
                   }
-                : {transform: [{translateX: sprit.x}, {translateY: sprit.y}]}
-            }
+                : {transform: [{translateX: sprit.x}, {translateY: sprit.y}]},
+            ]}
             onTouchStart={() => {
               setSprits(spritsTemp => {
                 spritsTemp[selectedSprit].x = pan.x._value
@@ -80,6 +125,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
               setSelectedSprit(index)
             }}
             {...(index === selectedSprit ? panResponder.panHandlers : '')}>
+            <Text>{sprit.name}</Text>
             <ImageBackground
               source={require('../assets/images/cat.png')}
               resizeMode="cover"

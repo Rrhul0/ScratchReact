@@ -30,6 +30,30 @@ const ACTIONS: Actions = {
       title: 'Go to center',
       action: 'center',
     },
+    {
+      title: 'Increase Size By 50%',
+      action: 'size+50',
+    },
+    {
+      title: 'Change Size Back to 100%',
+      action: 'size',
+    },
+    {
+      title: 'Decrease Size By 50%',
+      action: 'size-50',
+    },
+    {
+      title: 'Say HELLO',
+      action: 'hello',
+    },
+    {
+      title: 'Think Hmmm...',
+      action: 'Hmmm',
+    },
+    {
+      title: 'Decrease Size By 50%',
+      action: 'size-50',
+    },
   ],
   looks: [],
   controls: [],
