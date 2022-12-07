@@ -63,60 +63,61 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
   ).current
 
   function startAction() {
-    const actions = sprits[0].actions
-    actions.forEach(action => {
-      switch (action.action) {
-        case 'x+50':
-          Animated.timing(pan, {
-            toValue: {x: pan.x._value + 50, y: pan.y._value},
-            duration: 10,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'y+50':
-          Animated.timing(pan, {
-            toValue: {x: pan.x._value, y: pan.y._value + 50},
-            duration: 10,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'center':
-          Animated.timing(pan, {
-            toValue: {x: 0, y: 0},
-            duration: 10,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'size+50':
-          Animated.timing(animationScale, {
-            toValue: animationScale._value + 0.5,
-            duration: 10000,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'size-50':
-          Animated.timing(animationScale, {
-            toValue: animationScale._value - 0.5,
-            duration: 10000,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'size':
-          Animated.timing(animationScale, {
-            toValue: 1,
-            duration: 10000,
-            useNativeDriver: false,
-          }).start()
-          break
-        case 'hello':
-          setSay('Hello')
-          break
-        case 'hmmm':
-          setSay('Hmmmm...')
-          break
-        default:
-          break
-      }
+    sprits.forEach(sprit => {
+      sprit.actions.forEach(action => {
+        switch (action.action) {
+          case 'x+50':
+            Animated.timing(pan, {
+              toValue: {x: pan.x._value + 50, y: pan.y._value},
+              duration: 10,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'y+50':
+            Animated.timing(pan, {
+              toValue: {x: pan.x._value, y: pan.y._value + 50},
+              duration: 10,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'center':
+            Animated.timing(pan, {
+              toValue: {x: 0, y: 0},
+              duration: 10,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'size+50':
+            Animated.timing(animationScale, {
+              toValue: animationScale._value + 0.5,
+              duration: 10000,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'size-50':
+            Animated.timing(animationScale, {
+              toValue: animationScale._value - 0.5,
+              duration: 10000,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'size':
+            Animated.timing(animationScale, {
+              toValue: 1,
+              duration: 10000,
+              useNativeDriver: false,
+            }).start()
+            break
+          case 'hello':
+            setSay('Hello')
+            break
+          case 'hmmm':
+            setSay('Hmmmm...')
+            break
+          default:
+            break
+        }
+      })
     })
     return
   }
