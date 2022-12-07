@@ -5,6 +5,7 @@ import {
   ImageBackground,
   PanResponder,
   PanResponderInstance,
+  Route,
   StyleSheet,
   Text,
   TextInput,
@@ -12,15 +13,19 @@ import {
   View,
 } from 'react-native'
 import React, {useRef, useState} from 'react'
+import {Action} from '../addActions'
 
-interface sprit {
+export interface Sprit {
   name: string
   x: number
   y: number
+  actions: Action[]
 }
 
-const HomeScreen = ({navigation}: {navigation: any}) => {
-  const [sprits, setSprits] = useState<sprit[]>([{name: 'cat', x: 0, y: 0}])
+const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
+  const [sprits, setSprits] = useState<Sprit[]>([
+    route.params ? route.params.sprits : {name: 'cat', x: 0, y: 0, actions: []},
+  ])
 
   const pan = useRef(new Animated.ValueXY()).current
 
@@ -40,6 +45,9 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
     }),
   ).current
 
+  //   pan.x.setValue(pan.x._value - 100)
+  console.log(sprits, 'reloaded')
+
   return (
     <View style={styles.main}>
       <View style={styles.containerCat}>
@@ -58,15 +66,24 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       <View style={styles.info}>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Sprit</Text>
-          <TextInput style={styles.infoBoxInput} />
+          <TextInput
+            style={styles.infoBoxInput}
+            value={sprits[sprits.length - 1].name}
+          />
         </View>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>X</Text>
-          <TextInput style={styles.infoBoxInput} />
+          <TextInput
+            style={styles.infoBoxInput}
+            value={sprits[sprits.length - 1].x.toString()}
+          />
         </View>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Y</Text>
-          <TextInput style={styles.infoBoxInput} />
+          <TextInput
+            style={styles.infoBoxInput}
+            value={sprits[sprits.length - 1].y.toString()}
+          />
         </View>
       </View>
       <View style={styles.items}>
@@ -79,14 +96,25 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
             <Button
               title="Add Actions"
               onPress={() =>
-                navigation.navigate('AddActions', {sprit: sprit.name})
+                navigation.navigate('AddActions', {
+                  sprits,
+                })
               }
             />
           </View>
         ))}
-        {/* <View> */}
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => {
+            setSprits(spritsTemp => {
+              const newCat: Sprit = {
+                name: 'cat' + spritsTemp.length,
+                x: 0,
+                y: 0,
+                actions: [],
+              }
+              return [...spritsTemp, newCat]
+            })
+          }}
           style={[styles.item, styles.addItem]}>
           <Text style={{fontSize: 50}}>+</Text>
         </TouchableOpacity>

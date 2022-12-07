@@ -1,8 +1,16 @@
-import {StyleSheet, Text, View} from 'react-native'
-import React from 'react'
+import {
+  Dimensions,
+  Pressable,
+  Route,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
+import React, {useState} from 'react'
 
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import {DraxProvider, DraxView, DraxList} from 'react-native-drax'
+import {Sprit} from './homescreen/HomeScreen'
 
 const ACTIONS: Actions = {
   motion: [
@@ -34,17 +42,18 @@ interface Actions {
   controls: Action[]
   events: Action[]
 }
-interface Action {
+export interface Action {
   title: string
   action: string
 }
 
-const AddActions = () => {
-  const draggableItemList = ACTIONS.motion
+const AddActions = ({route, navigation}: {route: Route; navigation: any}) => {
+  const [sprits, setSprits] = useState<Sprit[]>(route.params.sprits)
+  const [selectedSprit, setSelectedSprit] = useState<number>(0)
 
-  const [selectedActionsList, setSelectedActionsList] = React.useState<
-    Action[]
-  >([])
+  console.log(route.params.setSprits)
+
+  const draggableItemList = ACTIONS.motion
 
   const DragUIComponent = ({item, index}: {item: Action; index: number}) => {
     return (
@@ -60,7 +69,7 @@ const AddActions = () => {
 
   return (
     <GestureHandlerRootView style={styles.main}>
-      <DraxProvider style={{flexDirection: 'row'}}>
+      <DraxProvider style={{flexDirection: 'row', height: '100%'}}>
         <View style={styles.column}>
           <Text style={styles.colHeading}>Code</Text>
           <View style={styles.section}>
@@ -75,23 +84,59 @@ const AddActions = () => {
         </View>
         <View style={styles.column}>
           <Text style={styles.colHeading}>Action</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderBottomWidth: 1,
+              borderColor: 'gray',
+            }}>
+            {sprits.map((sprit, index) => (
+              <Pressable
+                style={[
+                  index === selectedSprit ? {backgroundColor: 'steelblue'} : {},
+                  {flex: 1},
+                ]}
+                onPress={() => setSelectedSprit(index)}>
+                <Text style={styles.textStyle}>{sprit.name}</Text>
+              </Pressable>
+            ))}
+          </View>
           <DraxView
             style={{height: '100%', width: '100%'}}
             receivingStyle={styles.receiving}
             renderContent={() => (
               <View>
-                {selectedActionsList.map((action, index) => (
-                  <Text key={index}>{action.title}</Text>
+                {sprits[selectedSprit].actions.map((action, index) => (
+                  <Text
+                    key={index}
+                    style={[
+                      styles.textStyle,
+                      styles.centeredContent,
+                      styles.draggableAction,
+                    ]}>
+                    {action.title}
+                  </Text>
                 ))}
               </View>
             )}
             onReceiveDragDrop={event => {
               const selected_item = ACTIONS.motion[event.dragged.payload]
-              setSelectedActionsList(list => list.concat(selected_item))
+              setSprits(spritsTemp => {
+                spritsTemp[selectedSprit].actions =
+                  spritsTemp[selectedSprit].actions.concat(selected_item)
+                return [...spritsTemp]
+              })
             }}
           />
         </View>
       </DraxProvider>
+      <Pressable
+        style={{padding: 5}}
+        onPress={() => {
+          navigation.navigate('Home', {sprits})
+        }}>
+        <Text style={styles.donebtn}>Done</Text>
+      </Pressable>
     </GestureHandlerRootView>
   )
 }
@@ -100,7 +145,7 @@ export default AddActions
 
 const styles = StyleSheet.create({
   main: {
-    height: '100%',
+    height: Dimensions.get('window').height - 100,
     width: '100%',
     paddingHorizontal: 2,
     paddingVertical: 5,
@@ -140,12 +185,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   draggableAction: {
-    // width: Dimensions.get('window').width / 4 - 12,
-    // height: Dimensions.get('window').width / 4 - 12,
     borderRadius: 4,
     marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderColor: 'steelblue',
     borderWidth: 1,
     marginHorizontal: 5,
@@ -155,5 +196,14 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 18,
+    textAlign: 'center',
+  },
+  donebtn: {
+    backgroundColor: 'steelblue',
+    borderRadius: 5,
+    padding: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 })

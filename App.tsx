@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import HomeScreen from './homescreen/HomeScreen'
 import HomeHeader from './homescreen/HomeHeader'
 import AddActions from './addActions'
-import {Background, Done} from './HeaderActionsItems'
+import {Background} from './HeaderActionsItems'
 
 const Stack = createNativeStackNavigator()
 
@@ -24,8 +24,8 @@ const App = () => {
           component={AddActions}
           options={{
             title: 'Add Actions',
-            headerRight: () => <Done />,
             headerBackground: () => <Background />,
+            headerBackVisible: false,
           }}
         />
       </Stack.Navigator>
