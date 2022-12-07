@@ -1,18 +1,14 @@
 import {Button, Image, StyleSheet, View} from 'react-native'
 import React from 'react'
 
-const HomeHeader = ({navigation}: {navigation: any}) => {
+const HomeHeader = () => {
   return (
     <View style={styles.header}>
       <Image
         style={styles.logo}
         source={require('../assets/images/scratch-logo.png')}
       />
-      <Button
-        title="Sign In"
-        onPress={() => navigation.navigate('SignIn')}
-        color="transparent"
-      />
+      <Button title="Sign In" onPress={() => {}} color="transparent" />
     </View>
   )
 }
