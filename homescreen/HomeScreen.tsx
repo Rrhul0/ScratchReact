@@ -24,10 +24,24 @@ export interface Sprit {
 
 const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
   const [sprits, setSprits] = useState<Sprit[]>([
-    route.params ? route.params.sprits : {name: 'cat', x: 0, y: 0, actions: []},
+    route.params
+      ? route.params.sprits
+      : {
+          name: 'cat',
+          x: 0,
+          y: 0,
+          actions: [],
+        },
   ])
 
+  const [selectedSprit, setSelectedSprit] = useState<number>(0)
+
   const pan = useRef(new Animated.ValueXY()).current
+
+  pan.setValue({
+    x: sprits[selectedSprit].x,
+    y: sprits[selectedSprit].y,
+  })
 
   const panResponder: PanResponderInstance = useRef(
     PanResponder.create({
@@ -45,23 +59,34 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
     }),
   ).current
 
-  //   pan.x.setValue(pan.x._value - 100)
-  console.log(sprits, 'reloaded')
-
   return (
     <View style={styles.main}>
       <View style={styles.containerCat}>
-        <Animated.View
-          style={{
-            transform: [{translateX: pan.x}, {translateY: pan.y}],
-          }}
-          {...panResponder.panHandlers}>
-          <ImageBackground
-            source={require('../assets/images/cat.png')}
-            resizeMode="cover"
-            style={{height: 50, width: 50}}
-          />
-        </Animated.View>
+        {sprits.map((sprit, index) => (
+          <Animated.View
+            style={
+              index === selectedSprit
+                ? {
+                    transform: [{translateX: pan.x}, {translateY: pan.y}],
+                  }
+                : {transform: [{translateX: sprit.x}, {translateY: sprit.y}]}
+            }
+            onTouchStart={() => {
+              setSprits(spritsTemp => {
+                spritsTemp[selectedSprit].x = pan.x._value
+                spritsTemp[selectedSprit].y = pan.y._value
+                return spritsTemp
+              })
+              setSelectedSprit(index)
+            }}
+            {...(index === selectedSprit ? panResponder.panHandlers : '')}>
+            <ImageBackground
+              source={require('../assets/images/cat.png')}
+              resizeMode="cover"
+              style={{height: 50, width: 50}}
+            />
+          </Animated.View>
+        ))}
       </View>
       <View style={styles.info}>
         <View style={styles.infoBox}>
@@ -75,14 +100,14 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
           <Text style={styles.infoBoxText}>X</Text>
           <TextInput
             style={styles.infoBoxInput}
-            value={sprits[sprits.length - 1].x.toString()}
+            // value={sprits[sprits.length - 1].x.toString()}
           />
         </View>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Y</Text>
           <TextInput
             style={styles.infoBoxInput}
-            value={sprits[sprits.length - 1].y.toString()}
+            // value={sprits[sprits.length - 1].y.toString()}
           />
         </View>
       </View>
