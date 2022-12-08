@@ -9,7 +9,6 @@ import {
   Route,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -36,7 +35,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
         },
   ])
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
-  const [say, setSay] = useState('')
+  //   const [say, setSay] = useState<Array>([])
 
   const animationScale = useRef(new Animated.Value(1)).current
 
@@ -110,10 +109,18 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             }).start()
             break
           case 'hello':
-            setSay('Hello')
+            // setSay('Hello')
+            setSprits(spritsTemp => {
+              spritsTemp[0].say = 'Hello'
+              return [...spritsTemp]
+            })
             break
           case 'hmmm':
-            setSay('Hmmmm...')
+            // setSay('Hmmmm...')
+            setSprits(spritsTemp => {
+              spritsTemp[0].say = 'Hmmm...'
+              return [...spritsTemp]
+            })
             break
           default:
             break
@@ -154,7 +161,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
               setSelectedSprit(index)
             }}
             {...(index === selectedSprit ? panResponder.panHandlers : '')}>
-            {say !== '' ? <Text style={styles.say}>{say}</Text> : ''}
+            {sprit.say ? <Text style={styles.say}>{sprit.say}</Text> : ''}
             <ImageBackground
               source={
                 sprit.name === 'cat'
