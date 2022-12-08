@@ -37,7 +37,12 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
   //   const [say, setSay] = useState<Array>([])
 
-  const animationScale = useRef(new Animated.Value(1)).current
+  //   const [animations, setAnimations] = useState([{scale:}])
+
+  const animationScale = useRef({
+    scale: new Animated.Value(1),
+    rotate: new Animated.Value(0),
+  }).current
 
   const pan = useRef(new Animated.ValueXY()).current
 
@@ -87,22 +92,29 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
               useNativeDriver: false,
             }).start()
             break
+          case '+90':
+            Animated.timing(animationScale.rotate, {
+              toValue: animationScale.rotate._value + 90,
+              duration: 10,
+              useNativeDriver: false,
+            }).start()
+            break
           case 'size+50':
-            Animated.timing(animationScale, {
-              toValue: animationScale._value + 0.5,
+            Animated.timing(animationScale.scale, {
+              toValue: animationScale.scale._value + 0.5,
               duration: 10000,
               useNativeDriver: false,
             }).start()
             break
           case 'size-50':
-            Animated.timing(animationScale, {
-              toValue: animationScale._value - 0.5,
+            Animated.timing(animationScale.scale, {
+              toValue: animationScale.scale._value - 0.5,
               duration: 10000,
               useNativeDriver: false,
             }).start()
             break
           case 'size':
-            Animated.timing(animationScale, {
+            Animated.timing(animationScale.scale, {
               toValue: 1,
               duration: 10000,
               useNativeDriver: false,
@@ -147,7 +159,8 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
                     transform: [
                       {translateX: pan.x},
                       {translateY: pan.y},
-                      {scale: animationScale},
+                      {scale: animationScale.scale},
+                      {rotate: animationScale.rotate._value + 'deg'},
                     ],
                   }
                 : {transform: [{translateX: sprit.x}, {translateY: sprit.y}]},
@@ -156,7 +169,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
               setSprits(spritsTemp => {
                 spritsTemp[selectedSprit].x = pan.x._value
                 spritsTemp[selectedSprit].y = pan.y._value
-                return spritsTemp
+                return [...spritsTemp]
               })
               setSelectedSprit(index)
             }}
@@ -233,7 +246,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             onPress={() => {
               setSprits(spritsTemp => {
                 const newSprit: Sprit = {
-                  name: 'dog',
+                  name: spritsTemp[0].name === 'cat' ? 'dog' : 'cat',
                   x: 0,
                   y: 0,
                   actions: [],
