@@ -186,8 +186,23 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
         </View>
       </View>
       <View style={styles.items}>
-        {sprits.map(sprit => (
+        {sprits.map((sprit, index) => (
           <View style={styles.item} key={sprit.name}>
+            {sprits.length > 1 ? (
+              <Pressable
+                style={styles.remove}
+                onPress={() => {
+                  setSprits(spritsTemp => {
+                    spritsTemp.splice(index, 1)
+                    return [...spritsTemp]
+                  })
+                  setSelectedSprit(0)
+                }}>
+                <Text>X</Text>
+              </Pressable>
+            ) : (
+              ''
+            )}
             <Image
               source={
                 sprit.name === 'cat'
@@ -295,6 +310,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 2,
     textAlign: 'center',
+  },
+  remove: {
+    backgroundColor: '#fb305490',
+
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    borderRadius: 8,
+    fontSize: 30,
+    color: 'red',
+    fontWeight: 'bold',
+    position: 'absolute',
+    top: -5,
+    right: -5,
   },
 })
 
