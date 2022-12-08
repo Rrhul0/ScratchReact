@@ -170,24 +170,19 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
       <View style={styles.info}>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Sprit</Text>
-          <TextInput
-            style={styles.infoBoxInput}
-            value={sprits[sprits.length - 1].name}
-          />
+          <Text style={styles.infoBoxInput}>{sprits[selectedSprit].name}</Text>
         </View>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>X</Text>
-          <TextInput
-            style={styles.infoBoxInput}
-            // value={sprits[sprits.length - 1].x.toString()}
-          />
+          <Text style={styles.infoBoxInput}>
+            {sprits[selectedSprit].x.toString()}
+          </Text>
         </View>
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxText}>Y</Text>
-          <TextInput
-            style={styles.infoBoxInput}
-            // value={sprits[sprits.length - 1].y.toString()}
-          />
+          <Text style={styles.infoBoxInput}>
+            {sprits[selectedSprit].y.toString()}
+          </Text>
         </View>
       </View>
       <View style={styles.items}>
