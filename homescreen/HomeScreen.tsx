@@ -20,6 +20,7 @@ export interface Sprit {
   name: string
   x: number
   y: number
+  say?: 'Hello' | 'Hmmm...'
   actions: Action[]
 }
 
@@ -155,7 +156,11 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             {...(index === selectedSprit ? panResponder.panHandlers : '')}>
             {say !== '' ? <Text style={styles.say}>{say}</Text> : ''}
             <ImageBackground
-              source={require('../assets/images/cat.png')}
+              source={
+                sprit.name === 'cat'
+                  ? require('../assets/images/cat.png')
+                  : require('../assets/images/dog.png')
+              }
               resizeMode="cover"
               style={{height: 50, width: 50}}
             />
@@ -189,7 +194,11 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
         {sprits.map(sprit => (
           <View style={styles.item} key={sprit.name}>
             <Image
-              source={require('../assets/images/cat.png')}
+              source={
+                sprit.name === 'cat'
+                  ? require('../assets/images/cat.png')
+                  : require('../assets/images/dog.png')
+              }
               style={{width: 50, height: 50, margin: 10}}
             />
             <Button
@@ -202,21 +211,25 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             />
           </View>
         ))}
-        <TouchableOpacity
-          onPress={() => {
-            setSprits(spritsTemp => {
-              const newCat: Sprit = {
-                name: 'cat' + spritsTemp.length,
-                x: 0,
-                y: 0,
-                actions: [],
-              }
-              return [...spritsTemp, newCat]
-            })
-          }}
-          style={[styles.item, styles.addItem]}>
-          <Text style={{fontSize: 50}}>+</Text>
-        </TouchableOpacity>
+        {sprits.length < 2 ? (
+          <TouchableOpacity
+            onPress={() => {
+              setSprits(spritsTemp => {
+                const newSprit: Sprit = {
+                  name: 'dog',
+                  x: 0,
+                  y: 0,
+                  actions: [],
+                }
+                return [...spritsTemp, newSprit]
+              })
+            }}
+            style={[styles.item, styles.addItem]}>
+            <Text style={{fontSize: 50}}>+</Text>
+          </TouchableOpacity>
+        ) : (
+          ''
+        )}
       </View>
     </View>
   )
