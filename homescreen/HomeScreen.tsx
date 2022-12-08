@@ -35,9 +35,6 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
         },
   ])
   const [selectedSprit, setSelectedSprit] = useState<number>(0)
-  //   const [say, setSay] = useState<Array>([])
-
-  //   const [animations, setAnimations] = useState([{scale:}])
 
   const animationScale = useRef({
     scale: new Animated.Value(1),
@@ -94,8 +91,22 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
             break
           case '+90':
             Animated.timing(animationScale.rotate, {
-              toValue: animationScale.rotate._value + 90,
-              duration: 10,
+              toValue: 90,
+              duration: 1000,
+              useNativeDriver: false,
+            }).start()
+            break
+          case '-90':
+            Animated.timing(animationScale.rotate, {
+              toValue: -90,
+              duration: 1000,
+              useNativeDriver: false,
+            }).start()
+            break
+          case '+0':
+            Animated.timing(animationScale.rotate, {
+              toValue: 0,
+              duration: 1000,
               useNativeDriver: false,
             }).start()
             break
@@ -182,7 +193,7 @@ const HomeScreen = ({route, navigation}: {route: Route; navigation: any}) => {
                   : require('../assets/images/dog.png')
               }
               resizeMode="cover"
-              style={{height: 50, width: 50}}
+              style={{height: 70, width: 50}}
             />
           </Animated.View>
         ))}

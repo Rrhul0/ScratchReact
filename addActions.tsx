@@ -22,8 +22,16 @@ const ACTIONS: Action[] = [
     action: 'y+50',
   },
   {
-    title: 'rotate 360',
-    action: '+360',
+    title: 'Rotate 90',
+    action: '+90',
+  },
+  {
+    title: 'Rotate -90',
+    action: '-90',
+  },
+  {
+    title: 'Correct Angle',
+    action: '+0',
   },
   {
     title: 'Go to center',
